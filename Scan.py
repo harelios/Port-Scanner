@@ -58,12 +58,12 @@ def verification_ports(ports,adresse):
         sock.settimeout(1)
         result = sock.connect_ex((adresse,port))
         if result == 0:
-            text_area.insert(END,f"port {port} : Ouvert.")
+            text_area.insert(END,f"port {port} : Ouvert.\n")
             ports_ouvert.append(port)  
         sock.close()
     if ports_ouvert:
         ports_ouvert = ", ".join(map(str, ports_ouvert))  # Transforme la liste en texte
-        text_area.insert(END,f"Ports ouvert sur une plage de {ports} : {ports_ouvert}")
+        text_area.insert(END,f"Ports ouvert sur une plage de {ports} : port(s) {ports_ouvert}")
     else:
         text_area.insert(END,f"Aucun port ouvert détecté sur l'adresse : {adresse} \n")
 
@@ -104,18 +104,16 @@ def test_single_port(adresse, port):
     sock.settimeout(5)
     result = sock.connect_ex((adresse, port))
     if result == 0:
-        text_area.insert(END,f"\n Port {port} : Ouvert")
+        text_area.insert(END,f"\n Port {port} : Ouvert \n")
     else:
-        text_area.insert(END,f"\n Port {port} : Fermé")
+        text_area.insert(END,f"\n Port {port} : Fermé \n")
     sock.close()
     
-
+    
 bouton = Button(root,text="Scanner un port spécifique", command=lancer_scan_port)
 bouton.place(x=10,y=200)  
 bouton = Button(root,text="Scanner une plage de ports", command=lancer_scan_plage)
 bouton.place(x=10,y=240)  
-
-
+bouton = Button(root,text="Quitter", command=root.quit)
+bouton.place(x=10,y=280)
 root.mainloop()
-#if __name__ == '__main__':
- #   main()
