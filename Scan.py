@@ -58,14 +58,14 @@ def verification_ports(ports,adresse):
         sock.settimeout(1)
         result = sock.connect_ex((adresse,port))
         if result == 0:
-            text_area.insert(f"port {port} : Ouvert.")
+            text_area.insert(END,f"port {port} : Ouvert.")
             ports_ouvert.append(port)  
         sock.close()
     if ports_ouvert:
         ports_ouvert = ", ".join(map(str, ports_ouvert))  # Transforme la liste en texte
         text_area.insert(END,f"Ports ouvert sur une plage de {ports} : {ports_ouvert}")
     else:
-        text_area.insert(END,f"Aucun port ouvert détecté sur l'adresse : {adresse}")
+        text_area.insert(END,f"Aucun port ouvert détecté sur l'adresse : {adresse} \n")
 
 
 def lancer_scan_port():
