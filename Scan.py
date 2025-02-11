@@ -4,27 +4,35 @@ from tkinter import ttk,END
 import tkinter as tk
 from tkinter import simpledialog
 
-#Finir l'interface (voir croquis) et après mettre des animations (de chargement, sur les boutons etc...)
 
 root = Tk()
 root.title("Scanner de ports")
 root.geometry("100x100")
-entry = ttk.Entry(root) #Pour mettre un input
-entry.pack()
 
 text_area = Text(root,height=20,width=150)
 text_area.pack()
 
 valeur = StringVar()
 valeur.set("")
-entree = Entry(root,textvariable=valeur,width=30)
-entree.pack()
+
+root.configure(bg = "#23272A") #couleur de fond gris foncé
+text_area.configure(bg = "#23272A", fg="white", font=("consolas", 12)) # Zone de texte en mode terminal
+
+style = ttk.Style()
+style.configure("Hover.TButton",font=("Arial",12,"bold") , foreground="black", background="#5865F2", padding="10")
 
 
-label = Label(root, text="Entrée utilisateur")
-label.pack()
+progress = ttk.Progressbar(root, orient=HORIZONTAL, length=100, mode="determinate")
+progress.place(x=10,y=320)
+progress.start(10)
+progress.after(2000, progress.stop)
 
-#Entrée utilisateurs 
+def on_enter(e):
+    e.widget.configure(style="Hover.TButton")
+    
+
+def on_leave(e):
+    e.widget.configure(style="TButton") 
 
 def choix():
     text_area.insert(END,"Voulez vous scanner : 1) Une adresse IP (par exemple : 127.0.0.1) \n 2) Un domaine ? (exemple.com) \n 3) Quitter\n ")
@@ -61,11 +69,14 @@ def verification_ports(ports,adresse):
             text_area.insert(END,f"port {port} : Ouvert.\n")
             ports_ouvert.append(port)  
         sock.close()
+        if port > ports+1:
+            break
     if ports_ouvert:
         ports_ouvert = ", ".join(map(str, ports_ouvert))  # Transforme la liste en texte
         text_area.insert(END,f"Ports ouvert sur une plage de {ports} : port(s) {ports_ouvert}")
     else:
         text_area.insert(END,f"Aucun port ouvert détecté sur l'adresse : {adresse} \n")
+        
 
 
 def lancer_scan_port():
@@ -109,11 +120,18 @@ def test_single_port(adresse, port):
         text_area.insert(END,f"\n Port {port} : Fermé \n")
     sock.close()
     
-    
-bouton = Button(root,text="Scanner un port spécifique", command=lancer_scan_port)
-bouton.place(x=10,y=200)  
-bouton = Button(root,text="Scanner une plage de ports", command=lancer_scan_plage)
-bouton.place(x=10,y=240)  
-bouton = Button(root,text="Quitter", command=root.quit)
-bouton.place(x=10,y=280)
+bouton_single_port = ttk.Button(root,text="Scanner un port spécifique", command=lancer_scan_port, style="TButton")
+bouton_single_port.bind("<Enter>",on_enter)
+bouton_single_port.bind("<Leave>", on_leave)
+bouton_single_port.place(x=600,y=400)  
+
+bouton_plage_port = ttk.Button(root,text="Scanner une plage de ports", command=lancer_scan_plage, style="TButton")
+bouton_plage_port.bind("<Enter>",on_enter)
+bouton_plage_port.bind("<Leave>", on_leave)
+bouton_plage_port.place(x=600,y=450)  
+
+bouton_quit = ttk.Button(root,text="Quitter", command=root.quit)
+bouton_quit.bind("<Enter>",on_enter)
+bouton_quit.bind("<Leave>", on_leave)
+bouton_quit.place(x=600,y=500)
 root.mainloop()
