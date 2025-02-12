@@ -22,10 +22,7 @@ style = ttk.Style()
 style.configure("Hover.TButton",font=("Arial",12,"bold") , foreground="black", background="#5865F2", padding="10")
 
 
-progress = ttk.Progressbar(root, orient=HORIZONTAL, length=100, mode="determinate")
-progress.place(x=10,y=320)
-progress.start(10)
-progress.after(2000, progress.stop)
+
 
 def on_enter(e):
     e.widget.configure(style="Hover.TButton")
